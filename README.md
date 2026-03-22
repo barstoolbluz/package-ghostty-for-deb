@@ -139,6 +139,22 @@ Historical releases are preserved — users can download any version from the
 [Releases](https://github.com/barstoolbluz/package-ghostty-for-deb/releases)
 page.
 
+## Color Prompt / dircolors Not Working
+
+Debian's default `~/.bashrc` only enables color prompts for terminals matching
+`xterm-color|*-256color`. Ghostty sets `TERM=xterm-ghostty`, which doesn't
+match either pattern. Fix by adding it to the case statement in `~/.bashrc`:
+
+```bash
+# Before:
+    xterm-color|*-256color) color_prompt=yes;;
+# After:
+    xterm-color|*-256color|xterm-ghostty) color_prompt=yes;;
+```
+
+This also affects `LS_COLORS` / `dircolors`. Apply the same fix on remote
+hosts you SSH into.
+
 ## Remote Hosts and Terminal Multiplexers
 
 Ghostty sets `TERM=xterm-ghostty`. When you SSH to a remote host, this value
