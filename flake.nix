@@ -4,9 +4,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     ghostty.url = "github:ghostty-org/ghostty";
+    nix-to-deb = {
+      url = "path:/home/daedalus/dev/nix-to-deb";
+      flake = true;
+    };
   };
 
-  outputs = { self, nixpkgs, ghostty, ... }:
+  outputs = { self, nixpkgs, ghostty, nix-to-deb, ... }:
     let
       system = "x86_64-linux";
       pkgs = (import nixpkgs {
@@ -14,7 +18,7 @@
         config.allowUnfree = true;
       }).extend ghostty.overlays.default;
 
-      nixToDeb = import ./nix-to-deb.nix;
+      nixToDeb = nix-to-deb.lib.nixToDeb;
 
       ghosttyDeb = nixToDeb {
         inherit pkgs;
@@ -77,11 +81,14 @@
           { src = "${pkgs.ghostty.terminfo}/share/terminfo/x"; dst = "terminfo/x"; }
         ];
 
+        # Note: "terminfo" omitted from shareFiles to avoid conflict with ncurses-term
+
         section = "x11";
         homepage = "https://ghostty.org";
         description = "Ghostty terminal emulator";
         longDescription = "A fast, feature-rich, and cross-platform terminal emulator that uses platform-native UI and GPU acceleration.\n .\n Built from source using Nix with bundled GTK4 and library dependencies.\n Uses the system glibc and GPU drivers for hardware compatibility.";
-        recommends = [ "fonts-noto-color-emoji" "xdg-utils" "dbus" ];
+        depends = [ "libc6 (>= 2.38)" "dbus" "fontconfig" "xdg-utils" ];
+        recommends = [ "fonts-noto-color-emoji" ];
       };
 
     in

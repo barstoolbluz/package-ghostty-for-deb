@@ -60,6 +60,18 @@
         "type": "github"
       }
     },
+    "nix-to-deb": {
+      "locked": {
+        "lastModified": 1774145247,
+        "narHash": "sha256-UbS4G9ie657CeT1r7UX+bPeySgVgtM423werhM9EnYs=",
+        "path": "/home/daedalus/dev/nix-to-deb",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/daedalus/dev/nix-to-deb",
+        "type": "path"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1770537093,
@@ -92,6 +104,7 @@
     "root": {
       "inputs": {
         "ghostty": "ghostty",
+        "nix-to-deb": "nix-to-deb",
         "nixpkgs": "nixpkgs_2"
       }
     },

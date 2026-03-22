@@ -67,9 +67,10 @@ No `--impure` flag needed. No NixGL. No Flox workarounds.
 
 ## How It Works
 
-The build uses `nix-to-deb.nix`, a generic function that takes any nix package
-and produces a `.deb`. The ghostty-specific configuration is in `flake.nix`;
-all the bundling, patching, and packaging logic lives in `nix-to-deb.nix`.
+The build uses [nix-to-deb](../nix-to-deb), a generic function that takes any
+nix package and produces a `.deb`. The ghostty-specific configuration is in
+`flake.nix`; all the bundling, patching, and packaging logic lives in
+`nix-to-deb`.
 
 The function does four things:
 
@@ -129,6 +130,31 @@ nix build .
 sudo dpkg -i result/ghostty_*_amd64.deb
 ```
 
+## Remote Hosts and Terminal Multiplexers
+
+Ghostty sets `TERM=xterm-ghostty`. When you SSH to a remote host, this value
+propagates, and programs like **tmux**, **byobu**, and **screen** will fail
+with `missing or unsuitable terminal: xterm-ghostty` if the remote doesn't
+have the terminfo entry.
+
+**Copy the terminfo to a remote host (one-time):**
+
+```bash
+infocmp xterm-ghostty | ssh user@remote 'tic -x -'
+```
+
+This compiles the entry into `~/.terminfo/` on the remote. You only need to do
+it once per host.
+
+**Or override TERM per-session:**
+
+```bash
+TERM=xterm-256color byobu
+```
+
+**Or install the .deb on the remote** — it includes `xterm-ghostty` terminfo
+alongside the full application.
+
 ## Limitations
 
 - **x86_64 only** — architecture is hardcoded. Adapting for aarch64 requires
@@ -156,5 +182,6 @@ myToolDeb = nixToDeb {
 ```
 
 For a GTK app, enable `gtkSupport = true` and provide typelib packages — see
-`flake.nix` for the full ghostty example. See [CLAUDE.md](CLAUDE.md) for a
-detailed writeup of the technique, including CLI vs GTK vs Qt considerations.
+`flake.nix` for the full ghostty example. See the [nix-to-deb README](../nix-to-deb/README.md) for the full API
+reference, and [CLAUDE.md](CLAUDE.md) for a detailed writeup of the underlying
+technique, including CLI vs GTK vs Qt considerations.

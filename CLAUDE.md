@@ -65,10 +65,12 @@ must match the running kernel), but **everything else can come from nix**.
 
 ## Applying the Pattern to Other Projects
 
-A generic `nix-to-deb.nix` function implements the full pipeline. For most
-projects, you only need to configure it — not reimplement the steps below.
-See `flake.nix` for a complete GTK example. The manual steps are documented
-here for understanding and for cases that need customization.
+A generic [`nix-to-deb`](../nix-to-deb) flake implements the full pipeline.
+For most projects, you only need to configure it — not reimplement the steps
+below. See `flake.nix` for a complete GTK example and the
+[nix-to-deb README](../nix-to-deb/README.md) for the full API reference.
+The manual steps are documented here for understanding and for cases that
+need customization.
 
 ### Step 1: Build with nix
 
