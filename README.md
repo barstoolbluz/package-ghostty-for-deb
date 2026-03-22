@@ -1,7 +1,9 @@
-# Ghostty .deb Builder
+# Ghostty .deb Releases
 
-Build [Ghostty](https://ghostty.org) from source using Nix and package it as a
-self-contained `.deb` for Debian/Ubuntu systems with NVIDIA GPU support.
+Pre-built `.deb` packages of [Ghostty](https://ghostty.org) for Debian/Ubuntu
+(amd64). Download from
+[Releases](https://github.com/barstoolbluz/package-ghostty-for-deb/releases)
+or build from source with Nix.
 
 ## Why?
 
@@ -20,17 +22,22 @@ This flake solves the problem by building a `.deb` that **bundles all nix-built
 libraries** (GTK4, libadwaita, harfbuzz, etc.) while using the **host's glibc
 and GPU drivers**, giving you the best of both worlds.
 
-## Quick Start
+## Install from Release
 
 ```bash
-# Build the .deb (requires nix with flakes enabled)
-nix build .
+# Download the latest .deb from GitHub releases
+gh release download --repo barstoolbluz/package-ghostty-for-deb -p '*.deb'
 
 # Install
-sudo dpkg -i result/ghostty_*_amd64.deb
+sudo dpkg -i ghostty_*_amd64.deb
+```
 
-# Run
-ghostty
+## Build from Source
+
+```bash
+# Requires nix with flakes enabled
+nix build .
+sudo dpkg -i result/ghostty_*_amd64.deb
 ```
 
 No `--impure` flag needed. No NixGL. No Flox workarounds.
@@ -115,20 +122,22 @@ at runtime from the host's `/usr/lib/x86_64-linux-gnu/` via libglvnd's EGL
 vendor dispatch. When NVIDIA updates from 595.x to 600.x or beyond, ghostty
 picks up the new drivers automatically. No rebuild needed.
 
-## Updating Ghostty
-
-To build a newer version:
+## Releasing a New Version
 
 ```bash
-# Update the flake lock to pull latest ghostty
-nix flake update ghostty
+# Build and release the latest stable ghostty tag
+./release.sh latest
 
-# Rebuild
-nix build .
-
-# Reinstall
-sudo dpkg -i result/ghostty_*_amd64.deb
+# Or a specific version
+./release.sh v1.3.1
 ```
+
+The script pins the flake input to the tag, builds the `.deb`, and optionally
+creates a GitHub release with the artifact attached.
+
+Historical releases are preserved — users can download any version from the
+[Releases](https://github.com/barstoolbluz/package-ghostty-for-deb/releases)
+page.
 
 ## Remote Hosts and Terminal Multiplexers
 
@@ -166,23 +175,8 @@ alongside the full application.
   `GLIBC_2.38`. Debian trixie (2.41) and Ubuntu 24.04+ (2.39) satisfy this.
 - **No auto-updates** — this is a local build, not a PPA.
 
-## Using `nix-to-deb.nix` for Other Projects
+## The Packaging System
 
-The generic function can package any nix-built application. For a CLI tool:
-
-```nix
-nixToDeb = import ./nix-to-deb.nix;
-
-myToolDeb = nixToDeb {
-  inherit pkgs;
-  package = pkgs.ripgrep;
-  binName = "rg";
-  shareFiles = [ "man" ];
-  description = "Fast regex search tool";
-};
-```
-
-For a GTK app, enable `gtkSupport = true` and provide typelib packages — see
-`flake.nix` for the full ghostty example. See the [nix-to-deb README](../nix-to-deb/README.md) for the full API
-reference, and [CLAUDE.md](CLAUDE.md) for a detailed writeup of the underlying
-technique, including CLI vs GTK vs Qt considerations.
+This repo uses [nix-to-deb](https://github.com/barstoolbluz/nix-to-deb), a
+generic function for packaging any nix-built application as a `.deb`. See
+[CLAUDE.md](CLAUDE.md) for a detailed writeup of the underlying technique.

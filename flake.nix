@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    ghostty.url = "github:ghostty-org/ghostty";
+    ghostty.url = "github:ghostty-org/ghostty/v1.3.1";
     nix-to-deb = {
       url = "path:/home/daedalus/dev/nix-to-deb";
       flake = true;
