@@ -65,14 +65,17 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1774289693,
-        "narHash": "sha256-DKBg1ondEFNhlCxjRYlFs5C7cx8J1Pvbs4/UPLYA9Ps=",
-        "path": "/home/daedalus/dev/nix-to-deb",
-        "type": "path"
+        "lastModified": 1774292862,
+        "narHash": "sha256-TswgTY1lYCDV1SHfP19SaGZ42AoZP+1TM/AMF8aCxC0=",
+        "owner": "barstoolbluz",
+        "repo": "nix2deb",
+        "rev": "c6b14999e37be9d2f749ed0b72f07147ab530cf2",
+        "type": "github"
       },
       "original": {
-        "path": "/home/daedalus/dev/nix-to-deb",
-        "type": "path"
+        "owner": "barstoolbluz",
+        "repo": "nix2deb",
+        "type": "github"
       }
     },
     "nixpkgs": {

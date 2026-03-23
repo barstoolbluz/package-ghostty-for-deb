@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     ghostty.url = "github:ghostty-org/ghostty/v1.3.1";
     nix-to-deb = {
-      url = "path:/home/daedalus/dev/nix-to-deb";
+      url = "github:barstoolbluz/nix2deb";
       flake = true;
     };
   };
