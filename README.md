@@ -2,7 +2,7 @@
 
 Pre-built `.deb` packages of [Ghostty](https://ghostty.org) for Debian/Ubuntu
 (amd64, arm64). Download from
-[Releases](https://github.com/barstoolbluz/package-ghostty-for-deb/releases)
+[Releases](https://github.com/barstoolbluz/ghostty4deb/releases)
 or build from source with Nix.
 
 ## Why?
@@ -25,11 +25,19 @@ and GPU drivers**, giving you the best of both worlds.
 ## Install from Release
 
 ```bash
-# Download the latest .deb from GitHub releases
-gh release download --repo barstoolbluz/package-ghostty-for-deb -p '*.deb'
+# Download the latest .deb for your architecture
+gh release download --repo barstoolbluz/ghostty4deb -p "*$(dpkg --print-architecture).deb"
 
 # Install
 sudo dpkg -i ghostty_*_$(dpkg --print-architecture).deb
+```
+
+Or download manually from the [Releases](https://github.com/barstoolbluz/ghostty4deb/releases) page.
+
+## Uninstall
+
+```bash
+sudo apt remove ghostty
 ```
 
 ## Build from Source
@@ -91,8 +99,8 @@ don't appear in `ldd` output.
 ### 2. Patch the binary
 
 `patchelf` rewrites the ELF binary:
-- **Interpreter**: `/lib64/ld-linux-x86-64.so.2` (system ld-linux)
-- **RUNPATH**: `/usr/lib/ghostty:/usr/lib/x86_64-linux-gnu`
+- **Interpreter**: system ld-linux (`/lib64/ld-linux-x86-64.so.2` on amd64, `/lib/ld-linux-aarch64.so.1` on arm64)
+- **RUNPATH**: `/usr/lib/ghostty:/usr/lib/<arch>-linux-gnu` (e.g. `x86_64` or `aarch64`)
 
 The bundled libs are found first. glibc and GPU drivers fall through to the
 system path. Using `RUNPATH` (not `RPATH`) follows the modern convention and
@@ -118,7 +126,7 @@ A shell wrapper at `/usr/bin/ghostty` sets environment variables that the nix
 ## NVIDIA Driver Updates
 
 The `.deb` contains **zero NVIDIA-specific libraries**. GPU drivers are loaded
-at runtime from the host's `/usr/lib/x86_64-linux-gnu/` via libglvnd's EGL
+at runtime from the host's architecture-specific lib directory via libglvnd's EGL
 vendor dispatch. When NVIDIA updates from 595.x to 600.x or beyond, ghostty
 picks up the new drivers automatically. No rebuild needed.
 
@@ -136,7 +144,7 @@ The script pins the flake input to the tag, builds the `.deb`, and optionally
 creates a GitHub release with the artifact attached.
 
 Historical releases are preserved — users can download any version from the
-[Releases](https://github.com/barstoolbluz/package-ghostty-for-deb/releases)
+[Releases](https://github.com/barstoolbluz/ghostty4deb/releases)
 page.
 
 ## Color Prompt / dircolors Not Working
