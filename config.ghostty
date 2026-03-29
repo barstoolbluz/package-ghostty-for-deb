@@ -1,0 +1,42 @@
+# Font (ghostty default)
+font-size = 12
+
+# Window
+window-width = 172
+window-height = 32
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+
+# Behavior
+copy-on-select = clipboard
+mouse-hide-while-typing = false
+confirm-close-surface = true
+right-click-action = paste
+keybind = ctrl+v=paste_from_clipboard
+
+# Solid background
+background-opacity = 1
+
+# Colors
+background = #1d1919
+foreground = #deddda
+
+# Palette (colors 0-15)
+palette = 0=#000000
+palette = 1=#c01c28
+palette = 2=#00aa00
+palette = 3=#a2734c
+palette = 4=#012d63
+palette = 5=#a347ba
+palette = 6=#07d8f7
+palette = 7=#d0cfcc
+palette = 8=#414141
+palette = 9=#f66151
+palette = 10=#55ff55
+palette = 11=#ffbe55
+palette = 12=#5587c4
+palette = 13=#c061cb
+palette = 14=#6ee6f9
+palette = 15=#ffffff

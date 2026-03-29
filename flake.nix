@@ -54,6 +54,7 @@
             # Extra env var specific to ghostty
             extraWrapperEnv = [
               { name = "GHOSTTY_RESOURCES_DIR"; value = "/usr/share/ghostty"; append = false; }
+              { name = "XDG_CONFIG_DIRS"; value = "/usr/share/ghostty/default-config"; append = true; }
             ];
 
             # Data files to copy from the nix package's share/
@@ -84,6 +85,8 @@
               { src = "${pkgs.ghostty.terminfo}/share/terminfo/x"; dst = "terminfo/x"; }
               # Bundle JetBrains Mono (ghostty's default font) as a system font
               { src = "${pkgs.jetbrains-mono}/share/fonts/truetype"; dst = "fonts/truetype/jetbrains-mono"; }
+              # Bundle default ghostty config (system-wide fallback via XDG_CONFIG_DIRS)
+              { src = ./config.ghostty; dst = "ghostty/default-config/ghostty/config.ghostty"; }
             ];
 
             # Note: "terminfo" omitted from shareFiles to avoid conflict with ncurses-term
